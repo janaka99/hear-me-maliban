@@ -150,6 +150,7 @@ function VideoUploadForm() {
       return;
     }
     const res = await videoUploadAction(values);
+    console.log(res);
     if (res.success) {
       form.reset();
       setVideoFile(null);

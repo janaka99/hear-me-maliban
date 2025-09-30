@@ -35,7 +35,7 @@ export const uploadVideo = async (
     };
   } catch (error) {
     return {
-      error: "Server error occured try gain",
+      error: error,
     };
   }
 };
