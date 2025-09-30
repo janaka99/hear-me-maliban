@@ -1,9 +1,9 @@
 "use server";
+import { prisma } from "@/lib/prisma";
 import {
   VideoUploadSchema,
   VideoUploadSchemaType,
 } from "./../schema/file-schema";
-import prisma from "@/lib/prisma";
 import { WelcomeFormSchema, WelcomeFormSchemaType } from "@/schema/file-schema";
 
 export const uploadVideo = async (
