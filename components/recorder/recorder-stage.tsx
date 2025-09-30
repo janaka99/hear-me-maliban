@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RecordingStage from "./recording-stage";
 import ProcessingStage from "./ProcessingStage";
 import ResultStage from "./ResultStage";
@@ -52,10 +52,17 @@ function RecorderStage({ mode }: { mode: "newspaper" | "app" }) {
     setStage("recording");
   };
 
+  useEffect(() => {
+    const stream = navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: true,
+    });
+  }, []);
+
   return (
     <>
       {stage == "recording" &&
-        (mode == "app" ? (
+        (mode == "newspaper" ? (
           <RecordingStage
             onRecordComplete={onRecordComplete}
             setCameraError={setCameraError}

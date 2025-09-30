@@ -185,7 +185,7 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
             console.log("looping ");
             // Determine the size of the filter.
             // We'll make it slightly wider than the face (e.g., 1.2 times the width)
-            const filterWidth = width * 0.5;
+            const filterWidth = width * 0.6;
             // Calculate height to maintain aspect ratio
             const aspectRatio = filterImage.height / filterImage.width;
             const filterHeight = filterWidth * aspectRatio;
@@ -199,8 +199,8 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
             // Since this is a microphone, let's place it a bit below the nose/mouth line (around 2/3 down the face)
             // const drawX = centerX - filterWidth / 2;
             // const drawY = y + height * 0.1 - filterHeight / 2; // 65% down the face
-            const drawX = mirroredX + width / 2 - filterWidth / 2;
-            const drawY = y + height * 0.7 - filterHeight / 2;
+            const drawX = mirroredX + width / 2 - filterWidth / 4;
+            const drawY = y + height * 1.3 - filterHeight / 2;
 
             // // Draw bounding box
             // ctx.strokeStyle = "lime"; // box color
