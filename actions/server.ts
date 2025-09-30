@@ -24,7 +24,7 @@ export const uploadVideo = async (
     await query(
       `INSERT INTO "WelcomeForm" (name, phone, dob, url, "updatedAt", "createdAt") 
        VALUES ($1, $2, $3, $4, $5, $6)`,
-      [data.name, data.phone, data.dob, userdata.url, new Date(), new Date()]
+      [data.name, data.phone, data.dob, url, new Date(), new Date()]
     );
 
     return {
@@ -49,11 +49,11 @@ export const videoUploadAction = async (
         error: "Server error occured try again",
       };
     }
-
+    console.log(data);
     await query(
       `INSERT INTO "WelcomeForm" (name, phone, dob, url, "updatedAt", "createdAt") 
        VALUES ($1, $2, $3, $4, $5, $6)`,
-      [data.name, data.phone, data.dob, userdata.url, new Date(), new Date()]
+      [data.name, data.phone, data.dob, data.video, new Date(), new Date()]
     );
 
     return {
