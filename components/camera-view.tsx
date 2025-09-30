@@ -5,6 +5,7 @@ import { useUser } from "@/context/user";
 import { Card } from "./ui/card";
 import { LoaderCircle } from "lucide-react";
 import RecorderStage from "./recorder/recorder-stage";
+import VideoUploadForm from "./video-upload-form";
 
 function CameraView({ view }: { view: "newspaper" | "app" }) {
   const { isloading, user } = useUser();
@@ -13,6 +14,21 @@ function CameraView({ view }: { view: "newspaper" | "app" }) {
     return (
       <div>
         <LoaderCircle className="text-xl size-9 text-accent animate-spin" />
+      </div>
+    );
+  }
+
+  if (view == "newspaper") {
+    return (
+      <div className="flex justify-center items-center p-6 h-full  from">
+        <div className="flex flex-col justify-center items-center gap-10 w-full">
+          <div className="max-w-72 md:max-w-96">
+            <img src="/logo.png" alt="" />
+          </div>
+          <Card className="p-4 w-full max-w-sm flex justify-center items-center bg-gradient-to-br from-white/40 to-transparent">
+            <VideoUploadForm />
+          </Card>
+        </div>
       </div>
     );
   }

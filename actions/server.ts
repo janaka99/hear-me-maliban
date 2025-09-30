@@ -1,5 +1,8 @@
 "use server";
-
+import {
+  VideoUploadSchema,
+  VideoUploadSchemaType,
+} from "./../schema/file-schema";
 import prisma from "@/lib/prisma";
 import { WelcomeFormSchema, WelcomeFormSchemaType } from "@/schema/file-schema";
 
@@ -23,6 +26,38 @@ export const uploadVideo = async (
         phone: data.phone,
         dob: data.dob,
         url: url,
+      },
+    });
+
+    return {
+      success: true,
+      videoUrl: "Successfully submitted",
+    };
+  } catch (error) {
+    return {
+      error: "Server error occured try gain",
+    };
+  }
+};
+
+export const videoUploadAction = async (
+  userdata: VideoUploadSchemaType | any
+) => {
+  try {
+    const { success, data, error } = VideoUploadSchema.safeParse(userdata);
+    if (!success) {
+      console.log(error);
+      return {
+        error: "Server error occured try gain",
+      };
+    }
+
+    const res = await prisma.welcomeForm.create({
+      data: {
+        name: data.name,
+        phone: data.phone,
+        dob: data.dob,
+        url: data.video,
       },
     });
 

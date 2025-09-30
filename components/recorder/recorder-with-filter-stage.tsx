@@ -150,8 +150,12 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
       );
       // --- DRAWING LOGIC   ---
 
-      // 1. Clear canvas and draw the video frame
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // // 1. Clear canvas and draw the video frame
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // ctx.save();
+      // ctx.scale(-1, 1);
+      // ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+      // ctx.restore();
       ctx.save();
       ctx.scale(-1, 1);
       ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
@@ -199,8 +203,8 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
             // Since this is a microphone, let's place it a bit below the nose/mouth line (around 2/3 down the face)
             // const drawX = centerX - filterWidth / 2;
             // const drawY = y + height * 0.1 - filterHeight / 2; // 65% down the face
-            const drawX = mirroredX + width / 2 - filterWidth / 4;
-            const drawY = y + height * 1.3 - filterHeight / 2;
+            const drawX = mirroredX + width / 2 - filterWidth / 2;
+            const drawY = y + height * 1.6 - filterHeight / 2;
 
             // // Draw bounding box
             // ctx.strokeStyle = "lime"; // box color

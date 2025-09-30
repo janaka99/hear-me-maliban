@@ -61,20 +61,13 @@ function RecorderStage({ mode }: { mode: "newspaper" | "app" }) {
 
   return (
     <>
-      {stage == "recording" &&
-        (mode == "newspaper" ? (
-          <RecordingStage
-            onRecordComplete={onRecordComplete}
-            setCameraError={setCameraError}
-            cameraError={cameraError}
-          />
-        ) : (
-          <RecordingStageWithFilter
-            onRecordComplete={onRecordComplete}
-            setCameraError={setCameraError}
-            cameraError={cameraError}
-          />
-        ))}
+      {stage == "recording" && (
+        <RecordingStageWithFilter
+          onRecordComplete={onRecordComplete}
+          setCameraError={setCameraError}
+          cameraError={cameraError}
+        />
+      )}
       {stage == "processing" && <ProcessingStage />}
       {stage == "result" && recordedVideo && (
         <ResultStage recordedVideo={recordedVideo} retry={retry} />
@@ -84,3 +77,9 @@ function RecorderStage({ mode }: { mode: "newspaper" | "app" }) {
 }
 
 export default RecorderStage;
+
+// <RecordingStage
+//   onRecordComplete={onRecordComplete}
+//   setCameraError={setCameraError}
+//   cameraError={cameraError}
+// />
