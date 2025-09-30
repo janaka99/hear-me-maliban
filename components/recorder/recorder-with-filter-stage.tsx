@@ -2,7 +2,6 @@
 
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-// FIX 1: Import all types/classes from tasks-vision as a namespace 'visionTasks'
 import * as visionTasks from "@mediapipe/tasks-vision";
 import Wrapper from "./ui/wrapper";
 import TopBarWithCancelButton from "./ui/top-bar-with-cancel-button";
