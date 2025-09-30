@@ -21,4 +21,7 @@ model WelcomeForm {
   phone String   // Phone number
   dob   DateTime // Date of birth
   url   String?  // Optional URL field
+   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
