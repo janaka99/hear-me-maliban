@@ -5,6 +5,7 @@ import {
   VideoUploadSchemaType,
 } from "./../schema/file-schema";
 import { WelcomeFormSchema, WelcomeFormSchemaType } from "@/schema/file-schema";
+import { query } from "@/lib/db";
 
 export const uploadVideo = async (
   userdata: WelcomeFormSchemaType | any,
@@ -20,14 +21,11 @@ export const uploadVideo = async (
       };
     }
 
-    const res = await prisma.welcomeForm.create({
-      data: {
-        name: data.name,
-        phone: data.phone,
-        dob: data.dob,
-        url: url,
-      },
-    });
+    await query(
+      `INSERT INTO "WelcomeForm" (name, phone, dob, url, "updatedAt", "createdAt") 
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [data.name, data.phone, data.dob, userdata.url, new Date(), new Date()]
+    );
 
     return {
       success: true,
@@ -52,14 +50,11 @@ export const videoUploadAction = async (
       };
     }
 
-    const res = await prisma.welcomeForm.create({
-      data: {
-        name: data.name,
-        phone: data.phone,
-        dob: data.dob,
-        url: data.video,
-      },
-    });
+    await query(
+      `INSERT INTO "WelcomeForm" (name, phone, dob, url, "updatedAt", "createdAt") 
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [data.name, data.phone, data.dob, userdata.url, new Date(), new Date()]
+    );
 
     return {
       success: true,
