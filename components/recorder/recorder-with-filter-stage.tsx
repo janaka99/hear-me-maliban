@@ -130,10 +130,6 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
   // 3. Draw loop using requestAnimationFrame (unchanged logic)
   useEffect(() => {
     let animationFrameId: number;
-    const lastPos = { x: 0, y: 0, w: 0, h: 0 };
-    let hasLast = false;
-
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const drawLoop = async () => {
       const video = videoRef.current;
@@ -148,17 +144,22 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
+      const detectionResult = faceDetector.detectForVideo(
+        video,
+        performance.now()
+      );
+      // --- DRAWING LOGIC   ---
+
       // // 1. Clear canvas and draw the video frame
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.scale(-1, 1);
       ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
       ctx.restore();
-
-      const detectionResult = faceDetector.detectForVideo(
-        video,
-        performance.now()
-      );
+      // ctx.save();
+      // ctx.scale(-1, 1);
+      // ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+      // ctx.restore();
 
       // 2. Draw the detection results (Bounding Box)
       const filterImage = filterImgRef.current;
@@ -169,27 +170,14 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
           //@ts-ignore
           let x = bbox.originX;
           //@ts-ignore
-          let y = bbox.originY;
+          const y = bbox.originY;
           //@ts-ignore
-          let w = bbox.width;
+          const width = bbox.width;
           //@ts-ignore
-          let h = bbox.height;
-
-          if (hasLast) {
-            x = lerp(lastPos.x, x, 0.2);
-            y = lerp(lastPos.y, y, 0.2);
-            w = lerp(lastPos.w, w, 0.2);
-            h = lerp(lastPos.h, h, 0.2);
-          }
-
-          lastPos.x = x;
-          lastPos.y = y;
-          lastPos.w = w;
-          lastPos.h = h;
-          hasLast = true;
+          const height = bbox.height;
 
           // Adjust X for the mirrored canvas flip
-          const mirroredX = canvas.width - x - w;
+          const mirroredX = canvas.width - x - width;
           // const mirroredX = x;
 
           //   Draw the bounding box
@@ -201,22 +189,22 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
             console.log("looping ");
             // Determine the size of the filter.
             // We'll make it slightly wider than the face (e.g., 1.2 times the width)
-            const filterWidth = w * 0.6;
+            const filterWidth = width * 0.6;
             // Calculate height to maintain aspect ratio
             const aspectRatio = filterImage.height / filterImage.width;
             const filterHeight = filterWidth * aspectRatio;
 
             // Calculate center of the bounding box
-            const centerX = mirroredX + w / 2;
-            const centerY = y + h / 2;
+            const centerX = mirroredX + width / 2;
+            const centerY = y + height / 2;
 
             // Calculate the top-left corner to draw the image, centering it.
             // We can adjust the Y position to align with specific facial features (e.g., the mouth area for a mustache)
             // Since this is a microphone, let's place it a bit below the nose/mouth line (around 2/3 down the face)
             // const drawX = centerX - filterWidth / 2;
             // const drawY = y + height * 0.1 - filterHeight / 2; // 65% down the face
-            const drawX = mirroredX + w / 2 - filterWidth / 2;
-            const drawY = y + h * 1.6 - filterHeight / 2;
+            const drawX = mirroredX + width / 2 - filterWidth / 2;
+            const drawY = y + height * 1.6 - filterHeight / 2;
 
             // // Draw bounding box
             // ctx.strokeStyle = "lime"; // box color
