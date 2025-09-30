@@ -66,6 +66,7 @@ export const videoUploadAction = async (
       videoUrl: "Successfully submitted",
     };
   } catch (error) {
+    console.log(error);
     return {
       error: "Server error occured try gain",
     };
