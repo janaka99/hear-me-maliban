@@ -16,7 +16,7 @@ export const uploadVideo = async (
     if (!success || !url) {
       console.log(error);
       return {
-        error: "Server error occured try gain",
+        error: "Server error occured try gain " + error,
       };
     }
 
