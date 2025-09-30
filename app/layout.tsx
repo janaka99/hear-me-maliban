@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { UserProvider } from "@/context/user";
+import { CameraProvider } from "@/context/use-camera";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased  h-full `}
       >
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <CameraProvider>{children}</CameraProvider>
+        </UserProvider>
         <Toaster />
       </body>
     </html>

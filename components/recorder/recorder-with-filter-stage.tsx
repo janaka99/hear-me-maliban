@@ -12,6 +12,7 @@ import VideoContainer from "./ui/video-container";
 import CountdownOverlay from "./ui/count-down-overlay";
 import REcordingIndicatorRing from "./ui/recording-indicator-ring";
 import BottomControlBar from "./ui/bottom-control-bar";
+import { useCamera } from "@/context/use-camera";
 
 // Use the types directly from the namespace
 type FaceDetector = visionTasks.FaceDetector;
@@ -25,6 +26,7 @@ interface CameraViewProps {
 
 function CameraScreen({ onRecordComplete }: CameraViewProps) {
   const { cancel } = useUser();
+  const { stream, setStream } = useCamera();
 
   const [cameraLoading, setcameraLoading] = useState(true);
   const [modelsLoading, setModelsLoading] = useState(true);
@@ -51,32 +53,18 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
   const [countdown, setCountdown] = useState<number | null>(null);
 
   // 1. Start Camera (unchanged)
-  const startCamera = async () => {
-    try {
-      setcameraLoading(true);
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: "user",
-          width: 640,
-          height: 480,
-        },
-        audio: true,
-      });
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-        videoRef.current.onloadeddata = () => {
-          setcameraLoading(false);
-        };
-        setcameraLoading(false);
-      } else {
-      }
-    } catch (err) {
-      console.error("Error accessing camera:", err);
-      alert(
-        "Could not access camera. Please ensure you have granted camera permissions."
-      );
+  useEffect(() => {
+    if (!stream) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((s) => {
+          setStream(s);
+          if (videoRef.current) videoRef.current.srcObject = s;
+        });
+    } else if (videoRef.current) {
+      videoRef.current.srcObject = stream;
     }
-  };
+  }, [stream]);
 
   // 2. Load MediaPipe Face Detector (The fix is applied here)
   useEffect(() => {
@@ -105,8 +93,6 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
         setFaceDetector(detector);
         setModelsLoading(false);
         console.log("MediaPipe Face Detector loaded.");
-
-        startCamera();
       } catch (error) {
         console.error("Failed to load MediaPipe Face Detector:", error);
         alert("Failed to load Face Detection models.");
@@ -274,7 +260,8 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
     }
-
+    stream?.getTracks().forEach((track) => track.stop());
+    setStream(null);
     cancel();
   };
 

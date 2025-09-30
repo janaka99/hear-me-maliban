@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import WelcomeForm from "./welcome-form";
 import { useUser } from "@/context/user";
 import { Card } from "./ui/card";
@@ -11,9 +11,11 @@ function CameraView({ view }: { view: "newspaper" | "app" }) {
   const { isloading, user } = useUser();
   const router = useRouter();
 
-  if (view != "newspaper" && user) {
-    router.push("/record");
-  }
+  useEffect(() => {
+    if (view !== "newspaper" && user) {
+      router.push("/record");
+    }
+  }, [view, user, router]);
 
   if (isloading) {
     return (
@@ -23,9 +25,9 @@ function CameraView({ view }: { view: "newspaper" | "app" }) {
     );
   }
 
-  if (view == "newspaper") {
+  if (view === "newspaper") {
     return (
-      <div className="flex justify-center items-center p-6 h-full  from">
+      <div className="flex justify-center items-center p-6 h-full">
         <div className="flex flex-col justify-center items-center gap-10 w-full">
           <div className="max-w-72 md:max-w-96">
             <img src="/logo.png" alt="" />
@@ -39,8 +41,8 @@ function CameraView({ view }: { view: "newspaper" | "app" }) {
   }
 
   return (
-    <div className="w-full min-h-[100svh]  mx-auto">
-      <div className="flex justify-center items-center p-6 h-full  from">
+    <div className="w-full min-h-[100svh] mx-auto">
+      <div className="flex justify-center items-center p-6 h-full">
         <div className="flex flex-col justify-center items-center gap-10 w-full">
           <div className="max-w-72 md:max-w-96">
             <img src="/logo.png" alt="" />
