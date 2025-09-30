@@ -43,19 +43,8 @@ function ProcessingStage() {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br  overflow-hidden">
-      {/* Animated Background Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse pointer-events-none" />
-      <div
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 from-indigo-950 via-purple-950 to-slate-950 rounded-full blur-3xl animate-pulse pointer-events-none"
-        style={{ animationDelay: "1s" }}
-      />
-      <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse pointer-events-none"
-        style={{ animationDelay: "2s" }}
-      />
-
-      <div className="absolute inset-0 flex items-center justify-center p-6">
+    <div className="inset-0 bg-gradient-to-br  overflow-hidden">
+      <div className="flex items-center justify-center p-6">
         <div className="w-full max-w-md space-y-8">
           {/* Main Content Card */}
           <div className="bg-white/5s backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl bg-white-5 ">

@@ -37,8 +37,8 @@ function ResultStage({ recordedVideo, retry }: ResultStageProps) {
   };
 
   return (
-    <div>
-      <div className=" flex items-center justify-center">
+    <div className="w-full min-w-[90%]  mx-auto py-6">
+      <div className=" flex items-center justify-center w-full">
         <div className="w-full max-w-md space-y-6">
           {/* Video Container */}
           <div className="relative aspect-[9/16] rounded-3xl  border-2 border-white/10">
@@ -75,12 +75,9 @@ function ResultStage({ recordedVideo, retry }: ResultStageProps) {
                 <video
                   src={recordedVideo}
                   controls
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover aspect-[9/16]"
                   playsInline
                 />
-
-                {/* Gradient Overlay for Better Visibility */}
-                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
               </>
             )}
           </div>

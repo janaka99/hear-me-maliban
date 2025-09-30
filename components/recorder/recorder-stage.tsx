@@ -52,21 +52,20 @@ function RecorderStage({ mode }: { mode: "newspaper" | "app" }) {
     setStage("recording");
   };
 
-  useEffect(() => {
-    const stream = navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
-      audio: true,
-    });
-  }, []);
-
   return (
     <>
       {stage == "recording" && (
-        <RecordingStageWithFilter
-          onRecordComplete={onRecordComplete}
-          setCameraError={setCameraError}
-          cameraError={cameraError}
-        />
+        <div className="w-full min-h-[100svh] flex flex-col">
+          <div className="max-w-2xl mx-auto flex-grow h-[calc(100svh-80px)] flex justify-center items-center p-4 overscroll-y-auto min-w-sm">
+            <div className="w-full max-w-[calc(100svh*9/16)] max-h-full  box-border rounded-2xl overflow-hidden">
+              <RecordingStageWithFilter
+                onRecordComplete={onRecordComplete}
+                setCameraError={setCameraError}
+                cameraError={cameraError}
+              />
+            </div>
+          </div>
+        </div>
       )}
       {stage == "processing" && <ProcessingStage />}
       {stage == "result" && recordedVideo && (
