@@ -45,18 +45,27 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const emptyDiv = useRef<HTMLDivElement>(null);
 
   // recording stuff
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<Blob[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
+  const logoImgRef = useRef<HTMLImageElement>(new Image());
 
   // 1. Start Camera (unchanged)
   useEffect(() => {
     if (!stream) {
       navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
+        .getUserMedia({
+          video: {
+            width: { ideal: 1280 }, // request HD
+            height: { ideal: 720 },
+            facingMode: "user", // front camera on mobile
+          },
+          audio: true,
+        })
         .then((s) => {
           setStream(s);
           if (videoRef.current) videoRef.current.srcObject = s;
@@ -113,6 +122,13 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
     };
   }, []);
 
+  useEffect(() => {
+    logoImgRef.current.src = "/camera_top_logo.png"; // must be in /public
+    logoImgRef.current.onload = () => {
+      console.log("Logo image loaded");
+    };
+  }, []);
+
   // 3. Draw loop using requestAnimationFrame (unchanged logic)
   useEffect(() => {
     let animationFrameId: number;
@@ -120,9 +136,17 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
     const drawLoop = async () => {
       const video = videoRef.current;
       const canvas = canvasRef.current;
+      const empDiv = emptyDiv.current;
       const ctx = canvas?.getContext("2d");
 
-      if (!video || !canvas || !ctx || !faceDetector || video.readyState < 2) {
+      if (
+        !video ||
+        !canvas ||
+        !ctx ||
+        !faceDetector ||
+        video.readyState < 2 ||
+        !empDiv
+      ) {
         animationFrameId = requestAnimationFrame(drawLoop);
         return;
       }
@@ -141,9 +165,58 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
       ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
       ctx.restore();
 
+      const rect = empDiv.getBoundingClientRect(); // visible CSS size
+      const canvasW = canvas.width;
+      const canvasH = canvas.height;
+      const rectW = rect.width;
+      const rectH = rect.height;
+      // 1. Calculate the scale factor that object-cover is using
+      // It's the maximum of the horizontal and vertical scale ratios
+      const scale = Math.max(rectW / canvasW, rectH / canvasH);
+
+      // 2. Calculate the total size of the video frame *after* scaling to 'cover'
+      const scaledW = canvasW * scale;
+      const scaledH = canvasH * scale;
+
+      // 3. Calculate the offsets (the cropped area) in CSS pixels
+      const offsetX = (scaledW - rectW) / 2;
+      const offsetY = (scaledH - rectH) / 2;
+
+      // 4. Convert the CSS pixel offset back to Canvas pixel coordinates (divide by scale)
+      const canvasOffsetX = offsetX / scale;
+      const canvasOffsetY = offsetY / scale;
+
+      const logoImg = logoImgRef.current;
+      if (logoImg && logoImg.complete) {
+        const DESIRED_PERCENTAGE = 0.5; // e.g., 15% of visible container width
+        const VISIBLE_PADDING = 20; // 20px padding from the visible edge
+
+        // Logo width is 15% of the visible container width, converted to canvas pixels
+        const visibleLogoWidth = rectW * DESIRED_PERCENTAGE;
+        const logoWidth = visibleLogoWidth / scale;
+
+        const aspectRatio = logoImg.height / logoImg.width;
+        const logoHeight = logoWidth * aspectRatio;
+
+        // Calculate draw positions in CANVAS PIXELS:
+
+        // X position: The total canvas width MINUS the cropped right-side offset
+        // MINUS the logo width MINUS the visible padding (converted to canvas pixels)
+        const drawX =
+          canvasW - canvasOffsetX - logoWidth - VISIBLE_PADDING / scale;
+
+        // Y position: The top offset (due to cropping) PLUS the visible padding
+        const drawY = canvasOffsetY + VISIBLE_PADDING / scale;
+
+        // 🖌️ Draw crisp logo (now correctly positioned in the visible area's top-right)
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(logoImg, drawX, drawY, logoWidth, logoHeight);
+      }
+
       // 2. Draw the detection results (Bounding Box)
       const filterImage = filterImgRef.current;
-      console.log(detectionResult);
+      // console.log(detectionResult);
       if (detectionResult && detectionResult.detections.length > 0) {
         for (const detection of detectionResult.detections) {
           const bbox = detection.boundingBox;
@@ -279,6 +352,10 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
         {isRecording && <RecordingTIme recordingTime={recordingTime} />}
       </TopBarWithCancelButton>
       <VideoContainer>
+        <div
+          ref={emptyDiv}
+          className="w-full h-full absolute top-0 left-0"
+        ></div>
         <video
           ref={videoRef}
           autoPlay
@@ -290,6 +367,7 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
           ref={canvasRef}
           className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none"
         />
+
         {/* Countdown Overlay */}
         {countdown !== null && <CountdownOverlay countdown={countdown} />}
 
