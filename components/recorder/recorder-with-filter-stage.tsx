@@ -307,7 +307,7 @@ function CameraScreen({ onRecordComplete }: CameraViewProps) {
     timerRef.current = setInterval(() => {
       setRecordingTime((prev) => {
         const newTime = prev + 1;
-        if (newTime >= 30) stopRecording();
+        if (newTime >= 60) stopRecording();
         return newTime;
       });
     }, 1000);

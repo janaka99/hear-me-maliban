@@ -45,7 +45,7 @@ function WelcomeForm() {
   };
 
   return (
-    <div className="p-6 w-full">
+    <div className="p-6 w-full relative z-10 ">
       {/* Glassmorphism container */}
       {/* Gradient overlay for depth */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl pointer-events-none" />

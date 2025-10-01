@@ -47,8 +47,19 @@ function CameraView({ view }: { view: "newspaper" | "app" }) {
           <div className="max-w-72 md:max-w-96">
             <img src="/logo.png" alt="" />
           </div>
-          <Card className="p-4 w-full max-w-sm flex justify-center items-center bg-gradient-to-br from-white/40 to-transparent">
+          <Card className="p-4 w-full max-w-sm flex justify-center items-center bg-gradient-to-br from-white/40 to-transparent relative">
+            {/* <img
+              src="/12.png"
+              alt=""
+              className="absolute w-[30%]  object-contain transform -translate-x-2/5 -translate-y-full top-0  left-0 "
+            /> */}
             <WelcomeForm />
+
+            {/* <img
+              src="/13.png"
+              alt=""
+              className="absolute w-[30%]  object-contain transform translate-x-2/5 translate-y-full bottom-0  right-0  "
+            /> */}
           </Card>
         </div>
       </div>

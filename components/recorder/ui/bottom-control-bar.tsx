@@ -36,7 +36,7 @@ function BottomControlBar({
       {/* Instructions */}
       {!isRecording && !isCountingDown && (
         <p className="text-center text-white/80 text-sm mt-4 px-4">
-          Tap to start recording (max 30 seconds)
+          Tap to start recording (max 60 seconds)
         </p>
       )}
     </div>

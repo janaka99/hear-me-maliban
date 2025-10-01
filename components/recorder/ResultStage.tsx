@@ -113,23 +113,33 @@ function ResultStage({ recordedVideo, retry }: ResultStageProps) {
                 </div>
               </div>
             </div>
-            <Button
-              onClick={upload}
-              disabled={uploading}
-              className="w-full rounded-full bg-accent hover:bg-accent/90 py-4 text-white font-semibold  h-auto shadow-xl border border-white/20  disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {uploading ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                  Uploading...
-                </>
-              ) : (
-                <>
-                  <Upload className="w-5 h-5 mr-2" />
-                  Submit Video
-                </>
-              )}
-            </Button>
+            <div className="w-full space-y-4">
+              <Button
+                onClick={upload}
+                disabled={uploading}
+                className="w-full rounded-full bg-accent hover:bg-accent/90 py-4 text-white font-semibold  h-auto shadow-xl border border-white/20  disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {uploading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-5 h-5 mr-2" />
+                    Submit Video
+                  </>
+                )}
+              </Button>
+
+              <Button
+                onClick={handleRetry}
+                disabled={uploading}
+                className="w-full rounded-full bg-accent hover:bg-accent/90 py-4 text-white font-semibold  h-auto shadow-xl border border-white/20  disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Record Again
+              </Button>
+            </div>
           </Card>
         </div>
       )}
