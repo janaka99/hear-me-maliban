@@ -358,7 +358,7 @@ function VideoUploadForm() {
                 className="w-full rounded-full bg-gradient-to-r from-purple-500/80 to-pink-500/80 hover:from-purple-500 hover:to-pink-500 text-white font-semibold h-12 backdrop-blur-sm border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
                 disabled={form.formState.isSubmitting || isloading}
               >
-                {form.formState.isSubmitting ? "Starting..." : "Start"}
+                {form.formState.isSubmitting ? "Submitting..." : "Submit"}
               </Button>
             </div>
           )}
